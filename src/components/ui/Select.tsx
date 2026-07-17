@@ -23,6 +23,7 @@ type BaseProps = {
   isClearable?: boolean;
   onChange: (value: string | null, action: ActionMeta<SelectOption>) => void;
   onBlur?: () => void;
+  onMenuOpen?: () => void;
   className?: string;
   formatCreateLabel?: (input: string) => string;
 };
@@ -48,15 +49,18 @@ const focusBackground =
 const neutralBorder =
   "color-mix(in srgb, var(--color-mid-gray) 80%, transparent)";
 
+// Match the compact height of Dropdown / Input compact (py-[5px] + text-sm).
 const selectStyles: StylesConfig<SelectOption, false> = {
   control: (base, state) => ({
     ...base,
-    minHeight: 40,
+    minHeight: 30,
+    height: 30,
     borderRadius: 6,
     borderColor: state.isFocused ? "var(--color-logo-primary)" : neutralBorder,
-    boxShadow: state.isFocused ? "0 0 0 1px var(--color-logo-primary)" : "none",
+    boxShadow: "none",
     backgroundColor: state.isFocused ? focusBackground : baseBackground,
     fontSize: "0.875rem",
+    fontWeight: 600,
     color: "var(--color-text)",
     transition: "all 150ms ease",
     ":hover": {
@@ -66,19 +70,29 @@ const selectStyles: StylesConfig<SelectOption, false> = {
   }),
   valueContainer: (base) => ({
     ...base,
-    paddingInline: 10,
-    paddingBlock: 6,
+    paddingInline: 8,
+    paddingBlock: 0,
+    height: 28,
   }),
   input: (base) => ({
     ...base,
     color: "var(--color-text)",
+    margin: 0,
+    padding: 0,
   }),
   singleValue: (base) => ({
     ...base,
     color: "var(--color-text)",
+    fontWeight: 600,
+  }),
+  indicatorsContainer: (base) => ({
+    ...base,
+    height: 28,
   }),
   dropdownIndicator: (base, state) => ({
     ...base,
+    paddingInline: 6,
+    paddingBlock: 0,
     color: state.isFocused
       ? "var(--color-logo-primary)"
       : "color-mix(in srgb, var(--color-mid-gray) 80%, transparent)",
@@ -88,10 +102,20 @@ const selectStyles: StylesConfig<SelectOption, false> = {
   }),
   clearIndicator: (base) => ({
     ...base,
+    paddingInline: 4,
+    paddingBlock: 0,
     color: "color-mix(in srgb, var(--color-mid-gray) 80%, transparent)",
     ":hover": {
       color: "var(--color-logo-primary)",
     },
+  }),
+  indicatorSeparator: () => ({
+    display: "none",
+  }),
+  loadingIndicator: (base) => ({
+    ...base,
+    paddingInline: 4,
+    paddingBlock: 0,
   }),
   menu: (provided) => ({
     ...provided,
@@ -99,23 +123,28 @@ const selectStyles: StylesConfig<SelectOption, false> = {
     backgroundColor: "var(--color-background)",
     color: "var(--color-text)",
     border:
-      "1px solid color-mix(in srgb, var(--color-mid-gray) 30%, transparent)",
+      "1px solid color-mix(in srgb, var(--color-mid-gray) 80%, transparent)",
     boxShadow: "0 10px 30px rgba(15, 15, 15, 0.2)",
   }),
   option: (base, state) => ({
     ...base,
+    paddingInline: 8,
+    paddingBlock: 4,
+    fontSize: "0.875rem",
     backgroundColor: state.isSelected
       ? focusBackground
       : state.isFocused
         ? hoverBackground
         : "transparent",
     color: "var(--color-text)",
+    fontWeight: state.isSelected ? 600 : 400,
     cursor: state.isDisabled ? "not-allowed" : base.cursor,
     opacity: state.isDisabled ? 0.5 : 1,
   }),
   placeholder: (base) => ({
     ...base,
     color: "color-mix(in srgb, var(--color-mid-gray) 65%, transparent)",
+    fontWeight: 600,
   }),
 };
 
@@ -129,6 +158,7 @@ export const Select: React.FC<SelectProps> = React.memo(
     isClearable = true,
     onChange,
     onBlur,
+    onMenuOpen,
     className = "",
     isCreatable,
     formatCreateLabel,
@@ -158,6 +188,7 @@ export const Select: React.FC<SelectProps> = React.memo(
       isDisabled: disabled,
       isLoading,
       onBlur,
+      onMenuOpen,
       isClearable,
       styles: selectStyles,
     };
