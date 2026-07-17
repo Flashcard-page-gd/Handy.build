@@ -25,7 +25,7 @@ type PostProcessProviderState = {
   handleProviderSelect: (providerId: string) => void;
   handleModelSelect: (value: string) => void;
   handleModelCreate: (value: string) => void;
-  handleRefreshModels: () => void;
+  handleModelMenuOpen: () => void;
 };
 
 const APPLE_PROVIDER_ID = "apple_intelligence";
@@ -163,10 +163,42 @@ export const usePostProcessProviderState = (): PostProcessProviderState => {
     [selectedProviderId, updatePostProcessModel],
   );
 
-  const handleRefreshModels = useCallback(() => {
-    if (isAppleProvider) return;
+  const isBaseUrlUpdating = isUpdating(
+    `post_process_base_url:${selectedProviderId}`,
+  );
+  const isApiKeyUpdating = isUpdating(
+    `post_process_api_key:${selectedProviderId}`,
+  );
+  const isModelUpdating = isUpdating(
+    `post_process_model:${selectedProviderId}`,
+  );
+  const isFetchingModels = isUpdating(
+    `post_process_models_fetch:${selectedProviderId}`,
+  );
+
+  const isCustomProvider = selectedProvider?.id === "custom";
+
+  // Fetch models when the dropdown opens so users don't need a separate
+  // refresh button. Skip when already fetching or the provider isn't
+  // configured yet (avoids noisy backend errors for empty API key / base URL).
+  const handleModelMenuOpen = useCallback(() => {
+    if (isAppleProvider || isFetchingModels) return;
+
+    const hasBaseUrl = baseUrl.trim() !== "";
+    const hasApiKey = apiKey.trim() !== "";
+    const canFetch = isCustomProvider ? hasBaseUrl : hasApiKey;
+    if (!canFetch) return;
+
     void fetchPostProcessModels(selectedProviderId);
-  }, [fetchPostProcessModels, isAppleProvider, selectedProviderId]);
+  }, [
+    apiKey,
+    baseUrl,
+    fetchPostProcessModels,
+    isAppleProvider,
+    isCustomProvider,
+    isFetchingModels,
+    selectedProviderId,
+  ]);
 
   const availableModelsRaw = postProcessModelOptions[selectedProviderId] || [];
 
@@ -192,23 +224,6 @@ export const usePostProcessProviderState = (): PostProcessProviderState => {
     return options;
   }, [availableModelsRaw, model]);
 
-  const isBaseUrlUpdating = isUpdating(
-    `post_process_base_url:${selectedProviderId}`,
-  );
-  const isApiKeyUpdating = isUpdating(
-    `post_process_api_key:${selectedProviderId}`,
-  );
-  const isModelUpdating = isUpdating(
-    `post_process_model:${selectedProviderId}`,
-  );
-  const isFetchingModels = isUpdating(
-    `post_process_models_fetch:${selectedProviderId}`,
-  );
-
-  const isCustomProvider = selectedProvider?.id === "custom";
-
-  // No automatic fetching - user must click refresh button
-
   return {
     providerOptions,
     selectedProviderId,
@@ -230,6 +245,6 @@ export const usePostProcessProviderState = (): PostProcessProviderState => {
     handleProviderSelect,
     handleModelSelect,
     handleModelCreate,
-    handleRefreshModels,
+    handleModelMenuOpen,
   };
 };
