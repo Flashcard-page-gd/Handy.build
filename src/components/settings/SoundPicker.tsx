@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "../ui/Button";
+import { ResetButton } from "../ui/ResetButton";
 import { Dropdown, DropdownOption } from "../ui/Dropdown";
 import { PlayIcon } from "lucide-react";
 import { SettingContainer } from "../ui/SettingContainer";
@@ -51,14 +51,12 @@ export const SoundPicker: React.FC<SoundPickerProps> = ({
           }
           options={options}
         />
-        <Button
-          variant="ghost"
-          size="sm"
+        <ResetButton
           onClick={handlePlayBothSounds}
-          title="Preview sound theme (plays start then stop)"
+          ariaLabel="Preview sound theme (plays start then stop)"
         >
           <PlayIcon className="h-4 w-4" />
-        </Button>
+        </ResetButton>
       </div>
     </SettingContainer>
   );
