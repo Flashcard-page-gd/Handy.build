@@ -42,7 +42,7 @@ export const SoundPicker: React.FC<SoundPickerProps> = ({
       grouped
       layout="horizontal"
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center space-x-1">
         <Dropdown
           selectedValue={selectedTheme}
           onSelect={(value) =>
