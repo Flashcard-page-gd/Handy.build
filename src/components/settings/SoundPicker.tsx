@@ -56,7 +56,7 @@ export const SoundPicker: React.FC<SoundPickerProps> = ({
           className="p-1 rounded-md border border-transparent transition-all duration-150 hover:bg-logo-primary/30 active:bg-logo-primary/50 active:translate-y-[1px] hover:cursor-pointer hover:border-logo-primary text-text/80"
           onClick={handlePlayBothSounds}
         >
-          <PlayIcon className="h-4 w-4" />
+          <PlayIcon className="h-5 w-5" />
         </button>
       </div>
     </SettingContainer>
