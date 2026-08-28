@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { RefreshCcw } from "lucide-react";
+import { AlertCircle, RefreshCcw, RotateCcw, X } from "lucide-react";
 import { toast } from "sonner";
 import { commands } from "@/bindings";
 
@@ -23,26 +23,78 @@ import { usePostProcessProviderState } from "../PostProcessingSettingsApi/usePos
 import { ShortcutInput } from "../ShortcutInput";
 import { useSettings } from "../../../hooks/useSettings";
 
+type TestErrorState = {
+  model: string;
+  message: string;
+  retryCount: number;
+};
+
 const PostProcessingSettingsApiComponent: React.FC = () => {
   const { t } = useTranslation();
   const state = usePostProcessProviderState();
-  const [isTesting, setIsTesting] = useState(false);
+  const [testingModel, setTestingModel] = useState<string | null>(null);
+  const [successModel, setSuccessModel] = useState<string | null>(null);
+  const [testError, setTestError] = useState<TestErrorState | null>(null);
+  const successTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    setTestingModel(null);
+    setSuccessModel(null);
+    setTestError(null);
+    if (successTimeoutRef.current) {
+      clearTimeout(successTimeoutRef.current);
+    }
+  }, [state.selectedProviderId]);
+
+  useEffect(() => {
+    return () => {
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleTestModel = async (model?: string) => {
-    if (isTesting) return;
+    const targetModel = model || state.model;
+    if (testingModel || !targetModel) return;
 
-    setIsTesting(true);
+    setTestingModel(targetModel);
     try {
-      const result = await commands.testPostProcessModel(model);
+      const result = await commands.testPostProcessModel(targetModel);
       if (result.status === "ok") {
+        setSuccessModel(targetModel);
+        setTestError(null);
         toast.success(t("settings.postProcessing.api.model.testSuccess"));
+
+        if (successTimeoutRef.current) {
+          clearTimeout(successTimeoutRef.current);
+        }
+        successTimeoutRef.current = setTimeout(() => {
+          setSuccessModel((current) =>
+            current === targetModel ? null : current,
+          );
+        }, 3000);
       } else {
-        toast.error(String(result.error));
+        setSuccessModel(null);
+        const errorMessage = String(result.error);
+        setTestError((prev) => ({
+          model: targetModel,
+          message: errorMessage,
+          retryCount:
+            prev && prev.model === targetModel ? prev.retryCount + 1 : 1,
+        }));
       }
     } catch (error) {
-      toast.error(String(error));
+      setSuccessModel(null);
+      const errorMessage = String(error);
+      setTestError((prev) => ({
+        model: targetModel,
+        message: errorMessage,
+        retryCount:
+          prev && prev.model === targetModel ? prev.retryCount + 1 : 1,
+      }));
     } finally {
-      setIsTesting(false);
+      setTestingModel(null);
     }
   };
 
@@ -128,38 +180,75 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
           layout="stacked"
           grouped={true}
         >
-          <div className="flex min-w-0 items-center gap-2">
-            <ModelSelect
-              value={state.model}
-              options={state.modelOptions}
-              disabled={state.isModelUpdating}
-              isLoading={state.isFetchingModels}
-              placeholder={
-                state.modelOptions.length > 0
-                  ? t(
-                      "settings.postProcessing.api.model.placeholderWithOptions",
-                    )
-                  : t("settings.postProcessing.api.model.placeholderNoOptions")
-              }
-              onSelect={state.handleModelSelect}
-              onCreate={state.handleModelCreate}
-              onBlur={() => {}}
-              onTest={handleTestModel}
-              isTesting={isTesting}
-              testLabel={t("settings.postProcessing.api.model.test")}
-              testingLabel={t("settings.postProcessing.api.model.testing")}
-              className="min-w-0 flex-1"
-            />
-            <ResetButton
-              onClick={state.handleRefreshModels}
-              disabled={state.isFetchingModels}
-              ariaLabel={t("settings.postProcessing.api.model.refreshModels")}
-              className="flex h-10 w-10 shrink-0 items-center justify-center"
-            >
-              <RefreshCcw
-                className={`h-4 w-4 ${state.isFetchingModels ? "animate-spin" : ""}`}
+          <div className="space-y-3">
+            <div className="flex min-w-0 items-center gap-2">
+              <ModelSelect
+                value={state.model}
+                options={state.modelOptions}
+                disabled={state.isModelUpdating}
+                isLoading={state.isFetchingModels}
+                placeholder={
+                  state.modelOptions.length > 0
+                    ? t(
+                        "settings.postProcessing.api.model.placeholderWithOptions",
+                      )
+                    : t("settings.postProcessing.api.model.placeholderNoOptions")
+                }
+                onSelect={state.handleModelSelect}
+                onCreate={state.handleModelCreate}
+                onBlur={() => {}}
+                onTest={handleTestModel}
+                testingModel={testingModel}
+                successModel={successModel}
+                testLabel={t("settings.postProcessing.api.model.test")}
+                testingLabel={t("settings.postProcessing.api.model.testing")}
+                className="min-w-0 flex-1"
               />
-            </ResetButton>
+              <ResetButton
+                onClick={state.handleRefreshModels}
+                disabled={state.isFetchingModels}
+                ariaLabel={t("settings.postProcessing.api.model.refreshModels")}
+                className="flex h-10 w-10 shrink-0 items-center justify-center"
+              >
+                <RefreshCcw
+                  className={`h-4 w-4 ${state.isFetchingModels ? "animate-spin" : ""}`}
+                />
+              </ResetButton>
+            </div>
+
+            {testError && (
+              <div className="relative flex items-start justify-between gap-3 p-3.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400">
+                <div className="flex items-start gap-3 min-w-0 flex-1">
+                  <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-red-500" />
+                  <div className="flex-1 min-w-0 space-y-2">
+                    <p className="text-sm break-words">{testError.message}</p>
+                    {testError.retryCount < 2 && (
+                      <Button
+                        type="button"
+                        variant="danger-ghost"
+                        size="sm"
+                        onClick={() => handleTestModel(testError.model)}
+                        disabled={Boolean(testingModel)}
+                        className="inline-flex items-center gap-1.5 text-xs font-medium text-red-400 hover:text-red-300 border border-red-500/30 hover:border-red-500/50 rounded px-2.5 py-1"
+                      >
+                        <RotateCcw
+                          className={`w-3.5 h-3.5 ${testingModel === testError.model ? "animate-spin" : ""}`}
+                        />
+                        {t("settings.postProcessing.api.model.retry")}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setTestError(null)}
+                  className="shrink-0 p-1 text-red-400 hover:text-red-300 rounded hover:bg-red-500/20 transition-colors"
+                  aria-label={t("settings.postProcessing.api.model.dismiss")}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </div>
         </SettingContainer>
       )}
