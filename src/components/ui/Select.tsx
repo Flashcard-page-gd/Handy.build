@@ -76,6 +76,10 @@ const selectStyles: StylesConfig<SelectOption, false> = {
   singleValue: (base) => ({
     ...base,
     color: "var(--color-text)",
+    minWidth: 0,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
   }),
   dropdownIndicator: (base, state) => ({
     ...base,
