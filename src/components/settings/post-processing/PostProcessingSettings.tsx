@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { RefreshCcw } from "lucide-react";
+import { toast } from "sonner";
 import { commands } from "@/bindings";
 
 import { Alert } from "../../ui/Alert";
@@ -25,6 +26,25 @@ import { useSettings } from "../../../hooks/useSettings";
 const PostProcessingSettingsApiComponent: React.FC = () => {
   const { t } = useTranslation();
   const state = usePostProcessProviderState();
+  const [isTesting, setIsTesting] = useState(false);
+
+  const handleTestModel = async () => {
+    if (isTesting) return;
+
+    setIsTesting(true);
+    try {
+      const result = await commands.testPostProcessModel();
+      if (result.status === "ok") {
+        toast.success(t("settings.postProcessing.api.model.testSuccess"));
+      } else {
+        toast.error(String(result.error));
+      }
+    } catch (error) {
+      toast.error(String(error));
+    } finally {
+      setIsTesting(false);
+    }
+  };
 
   return (
     <>
@@ -136,6 +156,20 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
                 className={`h-4 w-4 ${state.isFetchingModels ? "animate-spin" : ""}`}
               />
             </ResetButton>
+            <Button
+              variant="secondary"
+              onClick={handleTestModel}
+              disabled={
+                isTesting ||
+                state.isModelUpdating ||
+                state.isApiKeyUpdating ||
+                !state.model.trim()
+              }
+            >
+              {isTesting
+                ? t("settings.postProcessing.api.model.testing")
+                : t("settings.postProcessing.api.model.test")}
+            </Button>
           </div>
         </SettingContainer>
       )}

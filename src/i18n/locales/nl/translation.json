@@ -419,7 +419,10 @@
           "descriptionDefault": "Kies een model dat door de geselecteerde provider wordt aangeboden.",
           "placeholderWithOptions": "Zoek of selecteer een model",
           "placeholderNoOptions": "Typ een modelnaam",
-          "refreshModels": "Modellen verversen"
+          "refreshModels": "Modellen verversen",
+          "test": "Model testen",
+          "testing": "Testen...",
+          "testSuccess": "Model werkt"
         }
       },
       "prompts": {
