@@ -1,10 +1,13 @@
-name: "Windows Build"
+name: "Windows Build Workflow"
+
+# Triggers the optimized Windows-only workflow to build and upload the .exe installer artifact.
 
 on:
   workflow_dispatch:
 
 jobs:
   build:
+    name: "Windows x64 Build (.exe)"
     permissions:
       contents: write
 
