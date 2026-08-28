@@ -419,7 +419,10 @@
           "descriptionDefault": "Seçili sağlayıcının sunduğu bir modeli seçin.",
           "placeholderWithOptions": "Model ara veya seç",
           "placeholderNoOptions": "Model adı yazın",
-          "refreshModels": "Modelleri Yenile"
+          "refreshModels": "Modelleri Yenile",
+          "test": "Test model",
+          "testing": "Testing...",
+          "testSuccess": "Model is working"
         }
       },
       "prompts": {

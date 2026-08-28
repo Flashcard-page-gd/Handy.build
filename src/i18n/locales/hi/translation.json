@@ -419,7 +419,10 @@
           "descriptionDefault": "चुने गए प्रोवाइडर का कोई मॉडल चुनें.",
           "placeholderWithOptions": "मॉडल खोजें या चुनें",
           "placeholderNoOptions": "मॉडल का नाम लिखें",
-          "refreshModels": "मॉडल रीफ़्रेश करें"
+          "refreshModels": "मॉडल रीफ़्रेश करें",
+          "test": "Test model",
+          "testing": "Testing...",
+          "testSuccess": "Model is working"
         }
       },
       "prompts": {

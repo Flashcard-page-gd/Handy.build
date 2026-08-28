@@ -1216,6 +1216,64 @@ pub async fn fetch_post_process_models(
     crate::llm_client::fetch_models(provider, api_key).await
 }
 
+/// Verify that the selected provider and model can complete a minimal request.
+/// The request deliberately contains no user transcription content.
+#[tauri::command]
+#[specta::specta]
+pub async fn test_post_process_model(app: AppHandle) -> Result<(), String> {
+    let settings = settings::get_settings(&app);
+    let provider = settings
+        .active_post_process_provider()
+        .cloned()
+        .ok_or_else(|| "No post-processing provider is selected.".to_string())?;
+    let model = settings
+        .post_process_models
+        .get(&provider.id)
+        .cloned()
+        .unwrap_or_default();
+
+    if model.trim().is_empty() {
+        return Err("Select a post-processing model before testing it.".to_string());
+    }
+
+    if provider.id == APPLE_INTELLIGENCE_PROVIDER_ID {
+        #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+        {
+            if !crate::apple_intelligence::check_apple_intelligence_availability() {
+                return Err("Apple Intelligence is not available on this device.".to_string());
+            }
+
+            let response = crate::apple_intelligence::process_text_with_system_prompt(
+                "",
+                crate::llm_client::POST_PROCESS_TEST_PROMPT,
+                model.trim().parse::<i32>().unwrap_or(0),
+            )?;
+            return crate::llm_client::validate_test_response(Some(&response));
+        }
+
+        #[cfg(not(all(target_os = "macos", target_arch = "aarch64")))]
+        {
+            return Err("Apple Intelligence is only available on Apple silicon Macs running macOS 15 or later.".to_string());
+        }
+    }
+
+    let api_key = settings
+        .post_process_api_keys
+        .get(&provider.id)
+        .cloned()
+        .unwrap_or_default();
+
+    if api_key.trim().is_empty() && provider.id != "custom" {
+        return Err(format!(
+            "API key is required for {}. Please add an API key before testing the model.",
+            provider.label
+        ));
+    }
+
+    let disable_reasoning = matches!(provider.id.as_str(), "custom" | "openrouter");
+    crate::llm_client::test_chat_completion(&provider, api_key, &model, disable_reasoning).await
+}
+
 #[tauri::command]
 #[specta::specta]
 pub fn set_post_process_selected_prompt(app: AppHandle, id: String) -> Result<(), String> {

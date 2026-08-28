@@ -419,7 +419,10 @@
           "descriptionDefault": "Scegli un modello reso disponibile dal provider selezionato.",
           "placeholderWithOptions": "Cerca o scegli un modello",
           "placeholderNoOptions": "Digita il nome di un modello",
-          "refreshModels": "Aggiorna modelli"
+          "refreshModels": "Aggiorna modelli",
+          "test": "Test model",
+          "testing": "Testing...",
+          "testSuccess": "Model is working"
         }
       },
       "prompts": {

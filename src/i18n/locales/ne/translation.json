@@ -419,7 +419,10 @@
           "descriptionDefault": "चयन गरिएको प्रदायकले उपलब्ध गराएको मोडेल छान्नुहोस्।",
           "placeholderWithOptions": "मोडेल खोज्नुहोस् वा चयन गर्नुहोस्",
           "placeholderNoOptions": "मोडेलको नाम टाइप गर्नुहोस्",
-          "refreshModels": "मोडेलहरू रिफ्रेस गर्नुहोस्"
+          "refreshModels": "मोडेलहरू रिफ्रेस गर्नुहोस्",
+          "test": "Test model",
+          "testing": "Testing...",
+          "testSuccess": "Model is working"
         }
       },
       "prompts": {

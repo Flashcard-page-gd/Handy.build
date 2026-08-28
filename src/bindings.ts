@@ -256,15 +256,23 @@ async setPostProcessProvider(providerId: string) : Promise<Result<null, string>>
     else return { status: "error", error: e  as any };
 }
 },
-async fetchPostProcessModels(providerId: string) : Promise<Result<string[], string>> {
-    try {
-    return { status: "ok", data: await TAURI_INVOKE("fetch_post_process_models", { providerId }) };
-} catch (e) {
-    if(e instanceof Error) throw e;
-    else return { status: "error", error: e  as any };
-}
-},
-async addPostProcessPrompt(name: string, prompt: string) : Promise<Result<LLMPrompt, string>> {
+  async fetchPostProcessModels(providerId: string) : Promise<Result<string[], string>> {
+      try {
+      return { status: "ok", data: await TAURI_INVOKE("fetch_post_process_models", { providerId }) };
+  } catch (e) {
+      if(e instanceof Error) throw e;
+      else return { status: "error", error: e  as any };
+  }
+  },
+  async testPostProcessModel() : Promise<Result<null, string>> {
+      try {
+      return { status: "ok", data: await TAURI_INVOKE("test_post_process_model") };
+  } catch (e) {
+      if(e instanceof Error) throw e;
+      else return { status: "error", error: e  as any };
+  }
+  },
+  async addPostProcessPrompt(name: string, prompt: string) : Promise<Result<LLMPrompt, string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("add_post_process_prompt", { name, prompt }) };
 } catch (e) {

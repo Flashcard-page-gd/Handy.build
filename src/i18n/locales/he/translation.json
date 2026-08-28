@@ -419,7 +419,10 @@
           "descriptionDefault": "בחר מודל שהספק הנבחר חושף.",
           "placeholderWithOptions": "חפש או בחר מודל",
           "placeholderNoOptions": "הקלד שם מודל",
-          "refreshModels": "רענן מודלים"
+          "refreshModels": "רענן מודלים",
+          "test": "Test model",
+          "testing": "Testing...",
+          "testSuccess": "Model is working"
         }
       },
       "prompts": {

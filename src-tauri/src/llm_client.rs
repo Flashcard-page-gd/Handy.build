@@ -7,6 +7,9 @@ use std::collections::HashSet;
 use std::error::Error as StdError;
 use std::sync::{Mutex, OnceLock};
 
+pub const POST_PROCESS_TEST_PROMPT: &str = "Reply with exactly: HANDY_TEST_OK";
+const POST_PROCESS_TEST_RESPONSE: &str = "HANDY_TEST_OK";
+
 #[derive(Debug, Serialize)]
 struct ChatMessage {
     role: String,
@@ -314,6 +317,47 @@ pub async fn send_chat_completion(
         disable_reasoning,
     )
     .await
+}
+
+/// Send a minimal request that verifies a configured post-processing model can
+/// produce the expected response without sending any transcription content.
+pub async fn test_chat_completion(
+    provider: &PostProcessProvider,
+    api_key: String,
+    model: &str,
+    disable_reasoning: bool,
+) -> Result<(), String> {
+    let response = send_chat_completion(
+        provider,
+        api_key,
+        model,
+        POST_PROCESS_TEST_PROMPT.to_string(),
+        disable_reasoning,
+    )
+    .await
+    .map_err(|error| classify_test_request_error(&error))?;
+
+    validate_test_response(response.as_deref())
+}
+
+fn classify_test_request_error(error: &str) -> String {
+    if error.contains("status 401") || error.contains("status 403") {
+        format!("Authentication or API key failure: {error}")
+    } else if error.contains("status 404") {
+        format!("Model not found or invalid model: {error}")
+    } else if error.contains("status 429") {
+        format!("Rate limit or quota exceeded: {error}")
+    } else {
+        format!("Provider/API error: {error}")
+    }
+}
+
+pub fn validate_test_response(response: Option<&str>) -> Result<(), String> {
+    match response {
+        Some(POST_PROCESS_TEST_RESPONSE) => Ok(()),
+        Some(_) => Err("Unexpected model response. Expected HANDY_TEST_OK.".to_string()),
+        None => Err("Provider returned no response content.".to_string()),
+    }
 }
 
 /// Send a chat completion request with structured output support.
@@ -730,5 +774,47 @@ mod tests {
         assert!(is_known_rejected(&key));
         // A different model on the same endpoint is tracked separately
         assert!(!is_known_rejected(&endpoint_key(&deepseek, "other-model")));
+    }
+
+    #[test]
+    fn test_response_accepts_the_expected_value() {
+        assert!(validate_test_response(Some("HANDY_TEST_OK")).is_ok());
+    }
+
+    #[test]
+    fn test_response_rejects_unexpected_value() {
+        assert_eq!(
+            validate_test_response(Some("42")).unwrap_err(),
+            "Unexpected model response. Expected HANDY_TEST_OK."
+        );
+    }
+
+    #[tokio::test]
+    async fn test_request_preserves_provider_api_failures() {
+        let base_url = serve_one_response("401 Unauthorized", "invalid API key").await;
+        let error = test_chat_completion(
+            &provider("openai", &base_url),
+            "bad-key".to_string(),
+            "test-model",
+            false,
+        )
+        .await
+        .unwrap_err();
+
+        assert!(error.starts_with("Authentication or API key failure:"));
+        assert!(error.contains("status 401"));
+        assert!(error.contains("invalid API key"));
+    }
+
+    #[test]
+    fn test_request_error_classifies_model_and_rate_limit_failures() {
+        assert!(
+            classify_test_request_error("API request failed with status 404")
+                .starts_with("Model not found or invalid model:")
+        );
+        assert!(
+            classify_test_request_error("API request failed with status 429")
+                .starts_with("Rate limit or quota exceeded:")
+        );
     }
 }

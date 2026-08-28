@@ -419,7 +419,10 @@
           "descriptionDefault": "Оберіть модель, надану обраним провайдером",
           "placeholderWithOptions": "Шукайте або оберіть модель",
           "placeholderNoOptions": "Введіть назву моделі",
-          "refreshModels": "Оновити моделі"
+          "refreshModels": "Оновити моделі",
+          "test": "Test model",
+          "testing": "Testing...",
+          "testSuccess": "Model is working"
         }
       },
       "prompts": {

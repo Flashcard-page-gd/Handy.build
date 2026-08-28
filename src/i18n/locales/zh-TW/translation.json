@@ -419,7 +419,10 @@
           "descriptionDefault": "從所選供應商的可用模型中選擇",
           "placeholderWithOptions": "搜尋或選擇模型",
           "placeholderNoOptions": "輸入模型名稱",
-          "refreshModels": "重新整理模型"
+          "refreshModels": "重新整理模型",
+          "test": "Test model",
+          "testing": "Testing...",
+          "testSuccess": "Model is working"
         }
       },
       "prompts": {

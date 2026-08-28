@@ -419,7 +419,10 @@
           "descriptionDefault": "Выберите модель, предоставляемую выбранным поставщиком.",
           "placeholderWithOptions": "Найдите или выберите модель",
           "placeholderNoOptions": "Введите название модели",
-          "refreshModels": "Обновить модели"
+          "refreshModels": "Обновить модели",
+          "test": "Test model",
+          "testing": "Testing...",
+          "testSuccess": "Model is working"
         }
       },
       "prompts": {

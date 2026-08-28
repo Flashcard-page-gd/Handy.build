@@ -419,7 +419,10 @@
           "descriptionDefault": "Vyberte model dostupný u vybraného poskytovatele.",
           "placeholderWithOptions": "Vyhledejte nebo vyberte model",
           "placeholderNoOptions": "Zadejte název modelu",
-          "refreshModels": "Obnovit modely"
+          "refreshModels": "Obnovit modely",
+          "test": "Test model",
+          "testing": "Testing...",
+          "testSuccess": "Model is working"
         }
       },
       "prompts": {
