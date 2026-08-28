@@ -28,12 +28,12 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
   const state = usePostProcessProviderState();
   const [isTesting, setIsTesting] = useState(false);
 
-  const handleTestModel = async () => {
+  const handleTestModel = async (model?: string) => {
     if (isTesting) return;
 
     setIsTesting(true);
     try {
-      const result = await commands.testPostProcessModel();
+      const result = await commands.testPostProcessModel(model);
       if (result.status === "ok") {
         toast.success(t("settings.postProcessing.api.model.testSuccess"));
       } else {
@@ -144,24 +144,12 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
               onSelect={state.handleModelSelect}
               onCreate={state.handleModelCreate}
               onBlur={() => {}}
+              onTest={handleTestModel}
+              isTesting={isTesting}
+              testLabel={t("settings.postProcessing.api.model.test")}
+              testingLabel={t("settings.postProcessing.api.model.testing")}
               className="min-w-0 flex-1"
             />
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={handleTestModel}
-              disabled={
-                isTesting ||
-                state.isModelUpdating ||
-                state.isApiKeyUpdating ||
-                !state.model.trim()
-              }
-              className="h-10 shrink-0"
-            >
-              {isTesting
-                ? t("settings.postProcessing.api.model.testing")
-                : t("settings.postProcessing.api.model.test")}
-            </Button>
             <ResetButton
               onClick={state.handleRefreshModels}
               disabled={state.isFetchingModels}
