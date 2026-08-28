@@ -1220,17 +1220,19 @@ pub async fn fetch_post_process_models(
 /// The request deliberately contains no user transcription content.
 #[tauri::command]
 #[specta::specta]
-pub async fn test_post_process_model(app: AppHandle) -> Result<(), String> {
+pub async fn test_post_process_model(app: AppHandle, model: Option<String>) -> Result<(), String> {
     let settings = settings::get_settings(&app);
     let provider = settings
         .active_post_process_provider()
         .cloned()
         .ok_or_else(|| "No post-processing provider is selected.".to_string())?;
-    let model = settings
-        .post_process_models
-        .get(&provider.id)
-        .cloned()
-        .unwrap_or_default();
+    let model = model.unwrap_or_else(|| {
+        settings
+            .post_process_models
+            .get(&provider.id)
+            .cloned()
+            .unwrap_or_default()
+    });
 
     if model.trim().is_empty() {
         return Err("Select a post-processing model before testing it.".to_string());
