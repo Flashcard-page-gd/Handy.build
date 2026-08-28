@@ -420,9 +420,11 @@
           "placeholderWithOptions": "Търсене или избор на модел",
           "placeholderNoOptions": "Въведете име на модел",
           "refreshModels": "Опресняване на моделите",
-          "test": "Test model",
-          "testing": "Testing...",
-          "testSuccess": "Model is working"
+          "test": "test",
+          "testing": "testing...",
+          "testSuccess": "Model is working",
+          "retry": "Retry",
+          "dismiss": "Dismiss"
         }
       },
       "prompts": {

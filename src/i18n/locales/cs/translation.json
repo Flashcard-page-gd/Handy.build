@@ -420,9 +420,11 @@
           "placeholderWithOptions": "Vyhledejte nebo vyberte model",
           "placeholderNoOptions": "Zadejte název modelu",
           "refreshModels": "Obnovit modely",
-          "test": "Test model",
-          "testing": "Testing...",
-          "testSuccess": "Model is working"
+          "test": "test",
+          "testing": "testing...",
+          "testSuccess": "Model is working",
+          "retry": "Retry",
+          "dismiss": "Dismiss"
         }
       },
       "prompts": {

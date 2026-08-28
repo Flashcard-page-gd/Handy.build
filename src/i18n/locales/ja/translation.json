@@ -420,9 +420,11 @@
           "placeholderWithOptions": "モデルを検索または選択",
           "placeholderNoOptions": "モデル名を入力",
           "refreshModels": "モデルを更新",
-          "test": "Test model",
-          "testing": "Testing...",
-          "testSuccess": "Model is working"
+          "test": "test",
+          "testing": "testing...",
+          "testSuccess": "Model is working",
+          "retry": "Retry",
+          "dismiss": "Dismiss"
         }
       },
       "prompts": {

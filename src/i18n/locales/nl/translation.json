@@ -420,9 +420,11 @@
           "placeholderWithOptions": "Zoek of selecteer een model",
           "placeholderNoOptions": "Typ een modelnaam",
           "refreshModels": "Modellen verversen",
-          "test": "Test",
-          "testing": "Testen...",
-          "testSuccess": "Model werkt"
+          "test": "test",
+          "testing": "testen...",
+          "testSuccess": "Model werkt",
+          "retry": "Opnieuw proberen",
+          "dismiss": "Sluiten"
         }
       },
       "prompts": {

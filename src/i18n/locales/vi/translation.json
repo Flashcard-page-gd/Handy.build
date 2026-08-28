@@ -420,9 +420,11 @@
           "placeholderWithOptions": "Tìm kiếm hoặc chọn một mô hình",
           "placeholderNoOptions": "Nhập tên mô hình",
           "refreshModels": "Làm mới mô hình",
-          "test": "Test model",
-          "testing": "Testing...",
-          "testSuccess": "Model is working"
+          "test": "test",
+          "testing": "testing...",
+          "testSuccess": "Model is working",
+          "retry": "Retry",
+          "dismiss": "Dismiss"
         }
       },
       "prompts": {

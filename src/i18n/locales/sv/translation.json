@@ -420,9 +420,11 @@
           "placeholderWithOptions": "Sök eller välj en modell",
           "placeholderNoOptions": "Ange ett modellnamn",
           "refreshModels": "Uppdatera modeller",
-          "test": "Test model",
-          "testing": "Testing...",
-          "testSuccess": "Model is working"
+          "test": "test",
+          "testing": "testing...",
+          "testSuccess": "Model is working",
+          "retry": "Retry",
+          "dismiss": "Dismiss"
         }
       },
       "prompts": {

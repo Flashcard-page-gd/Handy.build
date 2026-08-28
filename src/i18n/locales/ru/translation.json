@@ -420,9 +420,11 @@
           "placeholderWithOptions": "Найдите или выберите модель",
           "placeholderNoOptions": "Введите название модели",
           "refreshModels": "Обновить модели",
-          "test": "Test model",
-          "testing": "Testing...",
-          "testSuccess": "Model is working"
+          "test": "test",
+          "testing": "testing...",
+          "testSuccess": "Model is working",
+          "retry": "Retry",
+          "dismiss": "Dismiss"
         }
       },
       "prompts": {

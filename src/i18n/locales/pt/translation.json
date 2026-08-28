@@ -420,9 +420,11 @@
           "placeholderWithOptions": "Buscar ou selecionar um modelo",
           "placeholderNoOptions": "Digite o nome de um modelo",
           "refreshModels": "Atualizar modelos",
-          "test": "Test model",
-          "testing": "Testing...",
-          "testSuccess": "Model is working"
+          "test": "test",
+          "testing": "testing...",
+          "testSuccess": "Model is working",
+          "retry": "Retry",
+          "dismiss": "Dismiss"
         }
       },
       "prompts": {

@@ -1,5 +1,6 @@
 import React from "react";
 import { components, type OptionProps } from "react-select";
+import { Check } from "lucide-react";
 import type { ModelOption } from "./types";
 import { Select } from "../../ui/Select";
 
@@ -13,7 +14,8 @@ type ModelSelectProps = {
   onCreate: (value: string) => void;
   onBlur: () => void;
   onTest: (value: string) => void;
-  isTesting?: boolean;
+  testingModel?: string | null;
+  successModel?: string | null;
   testLabel: string;
   testingLabel: string;
   className?: string;
@@ -30,7 +32,8 @@ export const ModelSelect: React.FC<ModelSelectProps> = React.memo(
     onCreate,
     onBlur,
     onTest,
-    isTesting = false,
+    testingModel = null,
+    successModel = null,
     testLabel,
     testingLabel,
     className = "flex-1 min-w-[360px]",
@@ -43,31 +46,43 @@ export const ModelSelect: React.FC<ModelSelectProps> = React.memo(
 
     const computedClassName = `text-sm ${className}`;
 
-    const ModelOption = (props: OptionProps<ModelOption, false>) => (
-      <components.Option {...props}>
-        <div className="flex min-w-0 items-center gap-3">
-          <span className="min-w-0 flex-1 truncate" title={props.data.label}>
-            {props.children}
-          </span>
-          <button
-            type="button"
-            className="shrink-0 text-logo-primary hover:underline disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={isTesting}
-            onMouseDown={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-            }}
-            onClick={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              onTest(props.data.value);
-            }}
-          >
-            {isTesting ? testingLabel : testLabel}
-          </button>
-        </div>
-      </components.Option>
-    );
+    const ModelOption = (props: OptionProps<ModelOption, false>) => {
+      const isThisTesting = testingModel === props.data.value;
+      const isThisSuccess = successModel === props.data.value;
+      const isAnyTesting = Boolean(testingModel);
+
+      return (
+        <components.Option {...props}>
+          <div className="flex min-w-0 items-center justify-between gap-3 w-full">
+            <span className="min-w-0 flex-1 truncate" title={props.data.label}>
+              {props.children}
+            </span>
+            {isThisSuccess ? (
+              <span className="inline-flex shrink-0 items-center text-green-500">
+                <Check className="h-4 w-4" />
+              </span>
+            ) : (
+              <button
+                type="button"
+                className="shrink-0 text-xs font-medium lowercase text-logo-primary hover:text-logo-primary/80 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+                disabled={isAnyTesting}
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }}
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  onTest(props.data.value);
+                }}
+              >
+                {isThisTesting ? testingLabel : testLabel}
+              </button>
+            )}
+          </div>
+        </components.Option>
+      );
+    };
 
     return (
       <Select
