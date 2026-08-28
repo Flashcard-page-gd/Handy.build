@@ -128,7 +128,7 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
           layout="stacked"
           grouped={true}
         >
-          <div className="flex items-center gap-2">
+          <div className="flex min-w-0 items-center gap-2">
             <ModelSelect
               value={state.model}
               options={state.modelOptions}
@@ -144,20 +144,11 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
               onSelect={state.handleModelSelect}
               onCreate={state.handleModelCreate}
               onBlur={() => {}}
-              className="flex-1 min-w-[380px]"
+              className="min-w-0 flex-1"
             />
-            <ResetButton
-              onClick={state.handleRefreshModels}
-              disabled={state.isFetchingModels}
-              ariaLabel={t("settings.postProcessing.api.model.refreshModels")}
-              className="flex h-10 w-10 items-center justify-center"
-            >
-              <RefreshCcw
-                className={`h-4 w-4 ${state.isFetchingModels ? "animate-spin" : ""}`}
-              />
-            </ResetButton>
             <Button
               variant="secondary"
+              size="sm"
               onClick={handleTestModel}
               disabled={
                 isTesting ||
@@ -165,11 +156,22 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
                 state.isApiKeyUpdating ||
                 !state.model.trim()
               }
+              className="h-10 shrink-0"
             >
               {isTesting
                 ? t("settings.postProcessing.api.model.testing")
                 : t("settings.postProcessing.api.model.test")}
             </Button>
+            <ResetButton
+              onClick={state.handleRefreshModels}
+              disabled={state.isFetchingModels}
+              ariaLabel={t("settings.postProcessing.api.model.refreshModels")}
+              className="flex h-10 w-10 shrink-0 items-center justify-center"
+            >
+              <RefreshCcw
+                className={`h-4 w-4 ${state.isFetchingModels ? "animate-spin" : ""}`}
+              />
+            </ResetButton>
           </div>
         </SettingContainer>
       )}
