@@ -426,7 +426,7 @@
         "title": "Prompt",
         "selectedPrompt": {
           "title": "Geselecteerde prompt",
-          "description": "Selecteer een sjabloon voor het verfijnen van transcripties of maak een nieuwe aan. Gebruik ${output} in de prompttekst om naar de gemaakte transcriptie te verwijzen."
+          "description": "Selecteer een sjabloon voor het verfijnen van transcripties of maak een nieuwe aan. Gebruik ${output} in de prompttekst om naar de gemaakte transcriptie te verwijzen, en ${active_window} om te verwijzen naar de naam van de app waar je in dicteerde."
         },
         "noPrompts": "Geen prompts beschikbaar",
         "selectPrompt": "Selecteer een prompt",
@@ -435,7 +435,7 @@
         "promptLabelPlaceholder": "Voer promptnaam in",
         "promptInstructions": "Prompt-instructies",
         "promptInstructionsPlaceholder": "Schrijf de instructies die na de transcriptie moeten worden uitgevoerd. Voorbeeld: Verbeter de grammatica en helderheid van de volgende tekst: ${output}",
-        "promptTip": "Tip: Gebruik <code>${output}</code> om de getranscribeerde tekst in je prompt in te voegen.",
+        "promptTip": "Tip: Gebruik <code>${output}</code> om de getranscribeerde tekst in je prompt in te voegen, of <code>${active_window}</code> om de naam van de actieve app in te voegen.",
         "updatePrompt": "Prompt bijwerken",
         "deletePrompt": "Prompt verwijderen",
         "createPrompt": "Prompt maken",

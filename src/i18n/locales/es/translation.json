@@ -426,7 +426,7 @@
         "title": "Prompt",
         "selectedPrompt": {
           "title": "Prompt seleccionado",
-          "description": "Selecciona una plantilla para refinar las transcripciones o crea una nueva. Usa ${output} dentro del texto del prompt para hacer referencia a la transcripción capturada."
+          "description": "Selecciona una plantilla para refinar las transcripciones o crea una nueva. Usa ${output} dentro del texto del prompt para hacer referencia a la transcripción capturada, y ${active_window} para hacer referencia al nombre de la aplicación en la que estabas dictando."
         },
         "noPrompts": "No hay prompts disponibles",
         "selectPrompt": "Seleccionar un prompt",
@@ -435,7 +435,7 @@
         "promptLabelPlaceholder": "Ingresa el nombre del prompt",
         "promptInstructions": "Instrucciones del prompt",
         "promptInstructionsPlaceholder": "Escribe las instrucciones para ejecutar después de la transcripción. Ejemplo: Mejora la gramática y claridad del siguiente texto: ${output}",
-        "promptTip": "Consejo: Usa <code>${output}</code> para insertar el texto transcrito en tu prompt.",
+        "promptTip": "Consejo: Usa <code>${output}</code> para insertar el texto transcrito en tu prompt, o <code>${active_window}</code> para insertar el nombre de la aplicación activa.",
         "updatePrompt": "Actualizar prompt",
         "deletePrompt": "Eliminar prompt",
         "createPrompt": "Crear prompt",

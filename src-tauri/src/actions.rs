@@ -174,6 +174,10 @@ async fn post_process_transcription(settings: &AppSettings, transcription: &str)
         return None;
     }
 
+    let active_window = crate::helpers::active_window::get_active_window_name()
+        .unwrap_or_else(|| "Unknown".to_string());
+    let prompt = prompt.replace("${active_window}", &active_window);
+
     debug!(
         "Starting LLM post-processing with provider '{}' (model: {})",
         provider.id, model

@@ -426,7 +426,7 @@
         "title": "Prompt",
         "selectedPrompt": {
           "title": "Wybrany prompt",
-          "description": "Wybierz szablon do ulepszania transkrypcji lub utwórz nowy. Użyj ${output} w treści, aby odwołać się do przechwyconej transkrypcji."
+          "description": "Wybierz szablon do ulepszania transkrypcji lub utwórz nowy. Użyj ${output} w treści, aby odwołać się do przechwyconej transkrypcji, oraz ${active_window}, aby odwołać się do nazwy aplikacji, w której dyktujesz."
         },
         "noPrompts": "Brak dostępnych promptów",
         "selectPrompt": "Wybierz prompt",
@@ -435,7 +435,7 @@
         "promptLabelPlaceholder": "Wpisz nazwę promptu",
         "promptInstructions": "Instrukcje promptu",
         "promptInstructionsPlaceholder": "Wpisz instrukcje do wykonania po transkrypcji. Przykład: Popraw gramatykę i jasność dla następującego tekstu: ${output}",
-        "promptTip": "Wskazówka: użyj <code>${output}</code>, aby wstawić transkrybowany tekst do promptu.",
+        "promptTip": "Wskazówka: użyj <code>${output}</code>, aby wstawić transkrybowany tekst do promptu, albo <code>${active_window}</code>, aby wstawić nazwę aktywnej aplikacji.",
         "updatePrompt": "Zaktualizuj prompt",
         "deletePrompt": "Usuń prompt",
         "createPrompt": "Utwórz prompt",
