@@ -406,7 +406,7 @@
         "title": "İstem",
         "selectedPrompt": {
           "title": "Seçili Prompt",
-          "description": "Transkripsiyonları iyileştirmek için bir şablon seçin veya yeni bir tane oluşturun. Yakalanan transkripte referans vermek için prompt metni içinde ${output} kullanın."
+          "description": "Transkripsiyonları iyileştirmek için bir şablon seçin veya yeni bir tane oluşturun. Yakalanan transkripte referans vermek için prompt metni içinde ${output} kullanın ve dikte ettiğiniz uygulamanın adına referans vermek için ${active_window} kullanın."
         },
         "noPrompts": "Kullanılabilir prompt yok",
         "selectPrompt": "Prompt Seç",
@@ -415,7 +415,7 @@
         "promptLabelPlaceholder": "Prompt adı girin",
         "promptInstructions": "Prompt Talimatları",
         "promptInstructionsPlaceholder": "Transkripsiyondan sonra çalıştırılacak talimatları yazın. Örnek: Aşağıdaki metnin dilbilgisini ve açıklığını iyileştir: ${output}",
-        "promptTip": "İpucu: Transkribe edilen metni promptunuza eklemek için <code>${output}</code> kullanın.",
+        "promptTip": "İpucu: Transkribe edilen metni promptunuza eklemek için <code>${output}</code> kullanın veya aktif uygulamanın adını eklemek için <code>${active_window}</code> kullanın.",
         "updatePrompt": "Promptu Güncelle",
         "deletePrompt": "Promptu Sil",
         "createPrompt": "Prompt Oluştur",

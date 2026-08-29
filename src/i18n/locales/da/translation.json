@@ -406,7 +406,7 @@
         "title": "Prompt",
         "selectedPrompt": {
           "title": "Valgt prompt",
-          "description": "Vælg en skabelon til at forfine transskriptioner, eller opret en ny. Brug ${output} i promptteksten for at referere til den fangede transskription."
+          "description": "Vælg en skabelon til at forfine transskriptioner, eller opret en ny. Brug ${output} i promptteksten for at referere til den fangede transskription, og ${active_window} til at referere til navnet på appen, du dikterede i."
         },
         "noPrompts": "Ingen prompts tilgængelige",
         "selectPrompt": "Vælg en prompt",
@@ -415,7 +415,7 @@
         "promptLabelPlaceholder": "Indtast promptnavn",
         "promptInstructions": "Promptinstruktioner",
         "promptInstructionsPlaceholder": "Skriv de instruktioner, der skal køres efter transskription. Eksempel: Forbedr grammatik og klarhed for følgende tekst: ${output}",
-        "promptTip": "Tip: Brug <code>${output}</code> til at indsætte den transskriberede tekst i din prompt.",
+        "promptTip": "Tip: Brug <code>${output}</code> til at indsætte den transskriberede tekst i din prompt, eller <code>${active_window}</code> til at indsætte navnet på det aktive program.",
         "updatePrompt": "Opdater prompt",
         "deletePrompt": "Slet prompt",
         "createPrompt": "Opret prompt",

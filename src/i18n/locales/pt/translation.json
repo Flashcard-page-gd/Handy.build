@@ -406,7 +406,7 @@
         "title": "Prompt",
         "selectedPrompt": {
           "title": "Prompt Selecionado",
-          "description": "Selecione um modelo para refinar transcrições ou crie um novo. Use ${output} dentro do texto do prompt para referenciar a transcrição capturada."
+          "description": "Selecione um modelo para refinar transcrições ou crie um novo. Use ${output} dentro do texto do prompt para referenciar a transcrição capturada, e ${active_window} para referenciar o nome do aplicativo em que você estava ditando."
         },
         "noPrompts": "Nenhum prompt disponível",
         "selectPrompt": "Selecionar um prompt",
@@ -415,7 +415,7 @@
         "promptLabelPlaceholder": "Digite o nome do prompt",
         "promptInstructions": "Instruções do Prompt",
         "promptInstructionsPlaceholder": "Escreva as instruções para executar após a transcrição. Exemplo: Melhore a gramática e clareza do seguinte texto: ${output}",
-        "promptTip": "Dica: Use <code>${output}</code> para inserir o texto transcrito no seu prompt.",
+        "promptTip": "Dica: Use <code>${output}</code> para inserir o texto transcrito no seu prompt, ou <code>${active_window}</code> para inserir o nome do aplicativo ativo.",
         "updatePrompt": "Atualizar Prompt",
         "deletePrompt": "Excluir Prompt",
         "createPrompt": "Criar Prompt",

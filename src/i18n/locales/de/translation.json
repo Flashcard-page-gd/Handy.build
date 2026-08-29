@@ -406,7 +406,7 @@
         "title": "Prompt",
         "selectedPrompt": {
           "title": "Ausgewählter Prompt",
-          "description": "Wähle eine Vorlage zur Verfeinerung von Transkriptionen oder erstelle eine neue. Verwende ${output} im Prompt-Text, um auf das erfasste Transkript zu verweisen."
+          "description": "Wähle eine Vorlage zur Verfeinerung von Transkriptionen oder erstelle eine neue. Verwende ${output} im Prompt-Text, um auf das erfasste Transkript zu verweisen, und ${active_window}, um auf den Namen der App zu verweisen, in die du diktiert hast."
         },
         "noPrompts": "Keine Prompts verfügbar",
         "selectPrompt": "Prompt auswählen",
@@ -415,7 +415,7 @@
         "promptLabelPlaceholder": "Prompt-Namen eingeben",
         "promptInstructions": "Prompt-Anweisungen",
         "promptInstructionsPlaceholder": "Schreibe die Anweisungen, die nach der Transkription ausgeführt werden sollen. Beispiel: Verbessere Grammatik und Klarheit für folgenden Text: ${output}",
-        "promptTip": "Tipp: Verwende <code>${output}</code>, um den transkribierten Text in deinen Prompt einzufügen.",
+        "promptTip": "Tipp: Verwende <code>${output}</code>, um den transkribierten Text in deinen Prompt einzufügen, oder <code>${active_window}</code>, um den Namen der aktiven Anwendung einzufügen.",
         "updatePrompt": "Prompt aktualisieren",
         "deletePrompt": "Prompt löschen",
         "createPrompt": "Prompt erstellen",

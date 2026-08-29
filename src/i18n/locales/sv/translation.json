@@ -406,7 +406,7 @@
         "title": "Prompt",
         "selectedPrompt": {
           "title": "Vald prompt",
-          "description": "Välj en mall för att förfina transkriptioner eller skapa en ny. Använd ${output} inuti prompttexten för att referera till den fångade transkriptionen."
+          "description": "Välj en mall för att förfina transkriptioner eller skapa en ny. Använd ${output} inuti prompttexten för att referera till den fångade transkriptionen, och ${active_window} för att referera till namnet på appen du dikterade i."
         },
         "noPrompts": "Inga prompter tillgängliga",
         "selectPrompt": "Välj en prompt",
@@ -415,7 +415,7 @@
         "promptLabelPlaceholder": "Ange namn på prompt",
         "promptInstructions": "Prompt-instruktioner",
         "promptInstructionsPlaceholder": "Skriv instruktionerna som ska köras efter transkription. Exempel: Förbättra grammatik och tydlighet för följande text: ${output}",
-        "promptTip": "Tips: Använd <code>${output}</code> för att infoga den transkriberade texten i din prompt.",
+        "promptTip": "Tips: Använd <code>${output}</code> för att infoga den transkriberade texten i din prompt, eller <code>${active_window}</code> för att infoga namnet på det aktiva programmet.",
         "updatePrompt": "Uppdatera prompt",
         "deletePrompt": "Ta bort prompt",
         "createPrompt": "Skapa prompt",

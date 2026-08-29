@@ -406,7 +406,7 @@
         "title": "Prompt",
         "selectedPrompt": {
           "title": "Vybraný prompt",
-          "description": "Vyberte šablonu pro zpřesnění přepisu nebo vytvořte novou. V textu promptu použijte ${output} pro vložení zachyceného přepisu."
+          "description": "Vyberte šablonu pro zpřesnění přepisu nebo vytvořte novou. V textu promptu použijte ${output} pro vložení zachyceného přepisu a ${active_window} pro odkaz na název aplikace, do které jste diktovali."
         },
         "noPrompts": "Nejsou k dispozici žádné prompty",
         "selectPrompt": "Vyberte prompt",
@@ -415,7 +415,7 @@
         "promptLabelPlaceholder": "Zadejte název promptu",
         "promptInstructions": "Instrukce promptu",
         "promptInstructionsPlaceholder": "Napište instrukce, které se mají spustit po přepisu. Příklad: Zlepšete gramatiku a srozumitelnost následujícího textu: ${output}",
-        "promptTip": "Tip: Použijte <code>${output}</code> pro vložení přepsaného textu do promptu.",
+        "promptTip": "Tip: Použijte <code>${output}</code> pro vložení přepsaného textu do promptu, nebo <code>${active_window}</code> pro vložení názvu aktivní aplikace.",
         "updatePrompt": "Aktualizovat prompt",
         "deletePrompt": "Smazat prompt",
         "createPrompt": "Vytvořit prompt",
