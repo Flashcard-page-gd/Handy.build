@@ -6,9 +6,16 @@ use serde_json::Value;
 use std::collections::HashSet;
 use std::error::Error as StdError;
 use std::sync::{Mutex, OnceLock};
+use std::time::Duration;
 
 pub const POST_PROCESS_TEST_PROMPT: &str = "Reply with exactly: HANDY_TEST_OK";
 const POST_PROCESS_TEST_RESPONSE: &str = "HANDY_TEST_OK";
+// Generous enough for reasoning models that ignore disable_reasoning, short
+// enough that the "testing..." state never hangs on a dead endpoint.
+const POST_PROCESS_TEST_TIMEOUT_SECS: u64 = 60;
+// Keep echoed model replies readable in the test error card without dumping a
+// reasoning model's whole chain of thought into the UI.
+const POST_PROCESS_TEST_REPLY_SNIPPET_LEN: usize = 200;
 
 #[derive(Debug, Serialize)]
 struct ChatMessage {
@@ -327,15 +334,27 @@ pub async fn test_chat_completion(
     model: &str,
     disable_reasoning: bool,
 ) -> Result<(), String> {
-    let response = send_chat_completion(
+    // Only bound the test request; real post-processing must stay unbounded
+    // because long transcriptions with reasoning models can legitimately run
+    // well past a fixed timeout.
+    let request = send_chat_completion(
         provider,
         api_key,
         model,
         POST_PROCESS_TEST_PROMPT.to_string(),
         disable_reasoning,
-    )
-    .await
-    .map_err(|error| classify_test_request_error(&error))?;
+    );
+
+    let response =
+        tokio::time::timeout(Duration::from_secs(POST_PROCESS_TEST_TIMEOUT_SECS), request)
+            .await
+            .map_err(|_| {
+                format!(
+                "Model response timed out after {} seconds. The provider did not answer in time.",
+                POST_PROCESS_TEST_TIMEOUT_SECS
+            )
+            })?
+            .map_err(|error| classify_test_request_error(&error))?;
 
     validate_test_response(response.as_deref())
 }
@@ -354,10 +373,33 @@ fn classify_test_request_error(error: &str) -> String {
 
 pub fn validate_test_response(response: Option<&str>) -> Result<(), String> {
     match response {
-        Some(POST_PROCESS_TEST_RESPONSE) => Ok(()),
-        Some(_) => Err("Unexpected model response. Expected HANDY_TEST_OK.".to_string()),
+        Some(reply)
+            if reply
+                .trim()
+                .eq_ignore_ascii_case(POST_PROCESS_TEST_RESPONSE) =>
+        {
+            Ok(())
+        }
+        Some(reply) => Err(format!(
+            "Unexpected model response. Expected HANDY_TEST_OK but the model replied: {}",
+            snippet(&reply.trim())
+        )),
         None => Err("Provider returned no response content.".to_string()),
     }
+}
+
+fn snippet(text: &str) -> String {
+    if text.is_empty() {
+        return "(empty response)".to_string();
+    }
+    if text.chars().count() <= POST_PROCESS_TEST_REPLY_SNIPPET_LEN {
+        return format!("\"{text}\"");
+    }
+    let truncated: String = text
+        .chars()
+        .take(POST_PROCESS_TEST_REPLY_SNIPPET_LEN)
+        .collect();
+    format!("\"{truncated}…\"")
 }
 
 /// Send a chat completion request with structured output support.
@@ -782,11 +824,36 @@ mod tests {
     }
 
     #[test]
+    fn test_response_tolerates_whitespace_and_case() {
+        assert!(validate_test_response(Some("  HANDY_TEST_OK  ")).is_ok());
+        assert!(validate_test_response(Some("handy_test_ok")).is_ok());
+    }
+
+    #[test]
     fn test_response_rejects_unexpected_value() {
         assert_eq!(
             validate_test_response(Some("42")).unwrap_err(),
-            "Unexpected model response. Expected HANDY_TEST_OK."
+            "Unexpected model response. Expected HANDY_TEST_OK but the model replied: \"42\""
         );
+    }
+
+    #[test]
+    fn test_response_rejects_empty_value() {
+        assert_eq!(
+            validate_test_response(Some("   ")).unwrap_err(),
+            "Unexpected model response. Expected HANDY_TEST_OK but the model replied: (empty response)"
+        );
+    }
+
+    #[test]
+    fn test_response_truncates_long_replies() {
+        let long_reply = "x".repeat(500);
+        let error = validate_test_response(Some(&long_reply)).unwrap_err();
+        assert!(error.starts_with(
+            "Unexpected model response. Expected HANDY_TEST_OK but the model replied:"
+        ));
+        assert!(error.matches('"').count() == 2);
+        assert!(error.len() < 300);
     }
 
     #[tokio::test]
