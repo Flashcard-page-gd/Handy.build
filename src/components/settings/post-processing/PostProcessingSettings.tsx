@@ -1,7 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import { AlertCircle, RefreshCcw, RotateCcw, X } from "lucide-react";
-import { toast } from "sonner";
+import {
+  AlertCircle,
+  CheckCircle2,
+  RefreshCcw,
+  RotateCcw,
+  X,
+} from "lucide-react";
 import { commands } from "@/bindings";
 
 import { Alert } from "../../ui/Alert";
@@ -23,76 +28,44 @@ import { usePostProcessProviderState } from "../PostProcessingSettingsApi/usePos
 import { ShortcutInput } from "../ShortcutInput";
 import { useSettings } from "../../../hooks/useSettings";
 
-type TestErrorState = {
-  model: string;
-  message: string;
-  retryCount: number;
-};
+type TestResultState =
+  | { kind: "success"; model: string }
+  | { kind: "error"; model: string; message: string };
 
 const PostProcessingSettingsApiComponent: React.FC = () => {
   const { t } = useTranslation();
   const state = usePostProcessProviderState();
   const [testingModel, setTestingModel] = useState<string | null>(null);
-  const [successModel, setSuccessModel] = useState<string | null>(null);
-  const [testError, setTestError] = useState<TestErrorState | null>(null);
-  const successTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [testResult, setTestResult] = useState<TestResultState | null>(null);
 
   useEffect(() => {
     setTestingModel(null);
-    setSuccessModel(null);
-    setTestError(null);
-    if (successTimeoutRef.current) {
-      clearTimeout(successTimeoutRef.current);
-    }
+    setTestResult(null);
   }, [state.selectedProviderId]);
-
-  useEffect(() => {
-    return () => {
-      if (successTimeoutRef.current) {
-        clearTimeout(successTimeoutRef.current);
-      }
-    };
-  }, []);
 
   const handleTestModel = async (model?: string) => {
     const targetModel = model || state.model;
     if (testingModel || !targetModel) return;
 
     setTestingModel(targetModel);
+    setTestResult(null);
     try {
       const result = await commands.testPostProcessModel(targetModel);
       if (result.status === "ok") {
-        setSuccessModel(targetModel);
-        setTestError(null);
-        toast.success(t("settings.postProcessing.api.model.testSuccess"));
-
-        if (successTimeoutRef.current) {
-          clearTimeout(successTimeoutRef.current);
-        }
-        successTimeoutRef.current = setTimeout(() => {
-          setSuccessModel((current) =>
-            current === targetModel ? null : current,
-          );
-        }, 3000);
+        setTestResult({ kind: "success", model: targetModel });
       } else {
-        setSuccessModel(null);
-        const errorMessage = String(result.error);
-        setTestError((prev) => ({
+        setTestResult({
+          kind: "error",
           model: targetModel,
-          message: errorMessage,
-          retryCount:
-            prev && prev.model === targetModel ? prev.retryCount + 1 : 1,
-        }));
+          message: String(result.error),
+        });
       }
     } catch (error) {
-      setSuccessModel(null);
-      const errorMessage = String(error);
-      setTestError((prev) => ({
+      setTestResult({
+        kind: "error",
         model: targetModel,
-        message: errorMessage,
-        retryCount:
-          prev && prev.model === targetModel ? prev.retryCount + 1 : 1,
-      }));
+        message: String(error),
+      });
     } finally {
       setTestingModel(null);
     }
@@ -192,14 +165,15 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
                     ? t(
                         "settings.postProcessing.api.model.placeholderWithOptions",
                       )
-                    : t("settings.postProcessing.api.model.placeholderNoOptions")
+                    : t(
+                        "settings.postProcessing.api.model.placeholderNoOptions",
+                      )
                 }
                 onSelect={state.handleModelSelect}
                 onCreate={state.handleModelCreate}
                 onBlur={() => {}}
                 onTest={handleTestModel}
                 testingModel={testingModel}
-                successModel={successModel}
                 testLabel={t("settings.postProcessing.api.model.test")}
                 testingLabel={t("settings.postProcessing.api.model.testing")}
                 className="min-w-0 flex-1"
@@ -216,33 +190,50 @@ const PostProcessingSettingsApiComponent: React.FC = () => {
               </ResetButton>
             </div>
 
-            {testError && (
+            {testResult?.kind === "error" && (
               <div className="relative flex items-start justify-between gap-3 p-3.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400">
                 <div className="flex items-start gap-3 min-w-0 flex-1">
                   <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-red-500" />
                   <div className="flex-1 min-w-0 space-y-2">
-                    <p className="text-sm break-words">{testError.message}</p>
-                    {testError.retryCount < 2 && (
-                      <Button
-                        type="button"
-                        variant="danger-ghost"
-                        size="sm"
-                        onClick={() => handleTestModel(testError.model)}
-                        disabled={Boolean(testingModel)}
-                        className="inline-flex items-center gap-1.5 text-xs font-medium text-red-400 hover:text-red-300 border border-red-500/30 hover:border-red-500/50 rounded px-2.5 py-1"
-                      >
-                        <RotateCcw
-                          className={`w-3.5 h-3.5 ${testingModel === testError.model ? "animate-spin" : ""}`}
-                        />
-                        {t("settings.postProcessing.api.model.retry")}
-                      </Button>
-                    )}
+                    <p className="text-sm break-words">{testResult.message}</p>
+                    <Button
+                      type="button"
+                      variant="danger-ghost"
+                      size="sm"
+                      onClick={() => handleTestModel(testResult.model)}
+                      disabled={Boolean(testingModel)}
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-red-400 hover:text-red-300 border border-red-500/30 hover:border-red-500/50 rounded px-2.5 py-1"
+                    >
+                      <RotateCcw
+                        className={`w-3.5 h-3.5 ${testingModel === testResult.model ? "animate-spin" : ""}`}
+                      />
+                      {t("settings.postProcessing.api.model.retry")}
+                    </Button>
                   </div>
                 </div>
                 <button
                   type="button"
-                  onClick={() => setTestError(null)}
+                  onClick={() => setTestResult(null)}
                   className="shrink-0 p-1 text-red-400 hover:text-red-300 rounded hover:bg-red-500/20 transition-colors"
+                  aria-label={t("settings.postProcessing.api.model.dismiss")}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            {testResult?.kind === "success" && (
+              <div className="relative flex items-start justify-between gap-3 p-3.5 rounded-lg bg-green-500/10 border border-green-500/20 text-green-500">
+                <div className="flex items-start gap-3 min-w-0 flex-1">
+                  <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
+                  <p className="flex-1 min-w-0 text-sm break-words">
+                    {t("settings.postProcessing.api.model.testSuccess")}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setTestResult(null)}
+                  className="shrink-0 p-1 text-green-500 hover:text-green-400 rounded hover:bg-green-500/20 transition-colors"
                   aria-label={t("settings.postProcessing.api.model.dismiss")}
                 >
                   <X className="w-4 h-4" />
