@@ -16,7 +16,8 @@
     "postProcessing": "Postproces",
     "history": "Historia",
     "debug": "Debugowanie",
-    "about": "O programie"
+    "about": "O programie",
+    "appearance": "Appearance"
   },
   "onboarding": {
     "subtitle": "Aby rozpocząć, wybierz model transkrypcji",
@@ -634,6 +635,69 @@
       "whatsNewUpdates": {
         "label": "Pokaż nowości",
         "description": "Pokazuj informacje o wydaniu po aktualizacjach Handy"
+      }
+    },
+    "appearance": {
+      "title": "Appearance",
+      "accentColor": {
+        "title": "Accent Color",
+        "description": "Choose an accent color theme for the app",
+        "selectTheme": "Select {{theme}} theme"
+      },
+      "themes": {
+        "pink": "Pink",
+        "blue": "Ocean Blue",
+        "green": "Forest Green",
+        "purple": "Royal Purple",
+        "orange": "Sunset Orange",
+        "teal": "Teal"
+      },
+      "overlayTheme": {
+        "title": "Overlay Style"
+      },
+      "showIcons": {
+        "label": "Show Icons",
+        "description": "Display microphone and cancel icons in the overlay"
+      },
+      "barsCentered": {
+        "label": "Centered Bars",
+        "description": "Bars grow from center instead of bottom"
+      },
+      "barCount": {
+        "label": "Bar Count",
+        "description": "Number of audio level bars"
+      },
+      "barSize": {
+        "label": "Bar Size",
+        "description": "Width of audio level bars"
+      },
+      "barColor": {
+        "label": "Bar Color",
+        "description": "Color of the audio level bars",
+        "accent": "Accent",
+        "white": "White",
+        "red": "Red",
+        "cyan": "Cyan",
+        "yellow": "Yellow",
+        "mint": "Mint"
+      },
+      "soundTheme": {
+        "label": "Sound Theme",
+        "description": "Sound effects for recording start and stop"
+      },
+      "overlayThemes": {
+        "pill": {
+          "name": "Pill",
+          "description": "Classic rounded pill with icon and cancel button"
+        },
+        "minimal": {
+          "name": "Minimal",
+          "description": "Compact bars only, no icons"
+        },
+        "glassmorphism": {
+          "name": "Glass",
+          "description": "Modern frosted glass effect"
+        }
       }
     }
   },
