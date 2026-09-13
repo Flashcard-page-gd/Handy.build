@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import "./RecordingOverlay.css";
 import { commands, events } from "@/bindings";
 import type {
+  AccentTheme,
+  OverlayTheme,
   StreamPhase,
   StreamPhaseEvent,
   StreamTextEvent,
@@ -40,9 +42,16 @@ const RecordingOverlay: React.FC = () => {
   // Overlay placement (top vs bottom of the screen). The Live panel grows downward
   // from a top overlay (oldest line under the pill) and upward from a bottom one.
   const [position, setPosition] = useState<"top" | "bottom">("bottom");
-  // True once live text overflows the cap. A top overlay fades its top edge only
-  // while overflowing, so the resting first line stays crisp flush under the pill.
   const [overflowing, setOverflowing] = useState(false);
+
+  // Appearance customization settings
+  const [accentTheme, setAccentTheme] = useState<AccentTheme>("pink");
+  const [overlayTheme, setOverlayTheme] = useState<OverlayTheme>("pill");
+  const [showIcons, setShowIcons] = useState(true);
+  const [barsCentered, setBarsCentered] = useState(false);
+  const [barCount, setBarCount] = useState(9);
+  const [barSize, setBarSize] = useState(4);
+  const [barColor, setBarColor] = useState("accent");
 
   const smoothedLevelsRef = useRef<number[]>(Array(16).fill(0));
   // Live-text scroll-back: the text region "sticks" to the newest line while the
@@ -53,7 +62,58 @@ const RecordingOverlay: React.FC = () => {
   const direction = getLanguageDirection(i18n.language);
 
   useEffect(() => {
+    const loadAppearance = async () => {
+      try {
+        const settings = await commands.getAppSettings();
+        if (settings.status === "ok") {
+          const accent = settings.data.accent_theme || "pink";
+          setAccentTheme(accent);
+          document.documentElement.setAttribute("data-accent-theme", accent);
+          setOverlayTheme(settings.data.overlay_theme || "pill");
+          setShowIcons(settings.data.overlay_show_icons ?? true);
+          setBarsCentered(settings.data.overlay_bars_centered ?? false);
+          setBarCount(settings.data.overlay_bar_count ?? 9);
+          setBarSize(settings.data.overlay_bar_size ?? 4);
+          setBarColor(settings.data.overlay_bar_color ?? "accent");
+        }
+      } catch {
+        // ignore
+      }
+    };
+    loadAppearance();
+
     const setupEventListeners = async () => {
+      const unlistenAccent = await listen<string>("theme-changed", (event) => {
+        if (event.payload) {
+          setAccentTheme(event.payload as AccentTheme);
+          document.documentElement.setAttribute("data-accent-theme", event.payload);
+        }
+      });
+
+      const unlistenOverlayTheme = await listen<string>("overlay-theme-changed", (e) => {
+        if (e.payload) setOverlayTheme(e.payload as OverlayTheme);
+      });
+
+      const unlistenShowIcons = await listen<boolean>("overlay-show-icons-changed", (e) => {
+        setShowIcons(e.payload);
+      });
+
+      const unlistenBarsCentered = await listen<boolean>("overlay-bars-centered-changed", (e) => {
+        setBarsCentered(e.payload);
+      });
+
+      const unlistenBarCount = await listen<number>("overlay-bar-count-changed", (e) => {
+        setBarCount(e.payload);
+      });
+
+      const unlistenBarSize = await listen<number>("overlay-bar-size-changed", (e) => {
+        setBarSize(e.payload);
+      });
+
+      const unlistenBarColor = await listen<string>("overlay-bar-color-changed", (e) => {
+        setBarColor(e.payload);
+      });
+
       const unlistenShow = await listen("show-overlay", async (event) => {
         const overlayState = event.payload as OverlayState;
         // Reset synchronously before settings I/O. A fast microphone can emit
@@ -122,6 +182,13 @@ const RecordingOverlay: React.FC = () => {
       });
 
       return () => {
+        unlistenAccent();
+        unlistenOverlayTheme();
+        unlistenShowIcons();
+        unlistenBarsCentered();
+        unlistenBarCount();
+        unlistenBarSize();
+        unlistenBarColor();
         unlistenShow();
         unlistenHide();
         unlistenReady();
@@ -170,16 +237,32 @@ const RecordingOverlay: React.FC = () => {
     `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
   // ---- Shared building blocks (one visual language for every overlay form) ----
+  const activeBarColor =
+    barColor === "accent" || !barColor
+      ? "var(--s-accent)"
+      : barColor;
+
   const waveform = (
-    <div className={`swave ${captureReady ? "ready" : "arming"}`}>
-      {levels.map((v, i) => (
-        <i
-          key={i}
-          style={{
-            height: `${Math.max(3, Math.min(18, 3 + Math.pow(v, 0.7) * 15))}px`,
-          }}
-        />
-      ))}
+    <div
+      className={`swave ${captureReady ? "ready" : "arming"}`}
+      style={{
+        alignItems: barsCentered ? "center" : "flex-end",
+      }}
+    >
+      {levels.slice(0, barCount).map((v, i) => {
+        const h = Math.max(3, Math.min(18, 3 + Math.pow(v, 0.7) * 15));
+        return (
+          <i
+            key={i}
+            style={{
+              width: `${barSize}px`,
+              height: barsCentered ? "18px" : `${h}px`,
+              transform: barsCentered ? `scaleY(${h / 18})` : undefined,
+              background: activeBarColor,
+            }}
+          />
+        );
+      })}
     </div>
   );
 
@@ -205,12 +288,12 @@ const RecordingOverlay: React.FC = () => {
   const listeningRow = (showTimer: boolean, showCancel: boolean) => (
     <div className="sbase">
       <div className="sbase-l">
-        <span className={`sdot ${captureReady ? "ready" : "arming"}`} />
+        {showIcons && <span className={`sdot ${captureReady ? "ready" : "arming"}`} />}
       </div>
       {waveform}
       <div className="sbase-r">
         {showTimer && <span className="stimer">{fmtTime(elapsed)}</span>}
-        {showCancel && cancelBtn}
+        {showCancel && showIcons && cancelBtn}
       </div>
     </div>
   );
@@ -223,7 +306,7 @@ const RecordingOverlay: React.FC = () => {
         <span className="sspinner" />
       </div>
       <span className="swork-label">{label}</span>
-      <div className="sbase-r">{showCancel && cancelBtn}</div>
+      <div className="sbase-r">{showCancel && showIcons && cancelBtn}</div>
     </div>
   );
 

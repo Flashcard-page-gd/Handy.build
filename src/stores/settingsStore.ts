@@ -165,6 +165,18 @@ const settingUpdaters: {
   log_level: (value) => commands.setLogLevel(value as any),
   app_language: (value) => commands.changeAppLanguageSetting(value as string),
   theme: (value) => commands.changeThemeSetting(value as string),
+  accent_theme: (value) => commands.changeAccentThemeSetting(value as string),
+  overlay_theme: (value) => commands.changeOverlayThemeSetting(value as string),
+  overlay_show_icons: (value) =>
+    commands.changeOverlayShowIconsSetting(value as boolean),
+  overlay_bars_centered: (value) =>
+    commands.changeOverlayBarsCenteredSetting(value as boolean),
+  overlay_bar_count: (value) =>
+    commands.changeOverlayBarCountSetting(value as number),
+  overlay_bar_size: (value) =>
+    commands.changeOverlayBarSizeSetting(value as number),
+  overlay_bar_color: (value) =>
+    commands.changeOverlayBarColorSetting(value as string),
   experimental_enabled: (value) =>
     commands.changeExperimentalEnabledSetting(value as boolean),
   lazy_stream_close: (value) =>

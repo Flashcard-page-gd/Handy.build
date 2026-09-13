@@ -16,7 +16,8 @@
     "postProcessing": "Efterbehandling",
     "history": "Historik",
     "debug": "Fejlfinding",
-    "about": "Om"
+    "about": "Om",
+    "appearance": "Appearance"
   },
   "onboarding": {
     "subtitle": "For at komme i gang skal du vælge en transskriptionsmodel",
@@ -633,6 +634,65 @@
           "title": "ggml",
           "description": "Højtydende tensor-bibliotek til maskinlæringsinferens på enheden",
           "details": "Handys lokale tale-til-tekst funktionalitet er bygget på transcribe.cpp og ggml. Tak for det fantastiske arbejde af Georgi Gerganov og bidragyderne."
+        }
+      }
+    },
+    "appearance": {
+      "title": "Appearance",
+      "accentColor": {
+        "title": "Accent Color",
+        "description": "Choose an accent color theme for the app",
+        "selectTheme": "Select {{theme}} theme"
+      },
+      "themes": {
+        "pink": "Pink",
+        "blue": "Ocean Blue",
+        "green": "Forest Green",
+        "purple": "Royal Purple",
+        "orange": "Sunset Orange",
+        "teal": "Teal"
+      },
+      "overlayTheme": {
+        "title": "Overlay Style"
+      },
+      "showIcons": {
+        "label": "Show Icons",
+        "description": "Display microphone and cancel icons in the overlay"
+      },
+      "barsCentered": {
+        "label": "Centered Bars",
+        "description": "Bars grow from center instead of bottom"
+      },
+      "barCount": {
+        "label": "Bar Count",
+        "description": "Number of audio level bars"
+      },
+      "barSize": {
+        "label": "Bar Size",
+        "description": "Width of audio level bars"
+      },
+      "barColor": {
+        "label": "Bar Color",
+        "description": "Color of the audio level bars",
+        "accent": "Accent",
+        "white": "White",
+        "red": "Red",
+        "cyan": "Cyan",
+        "yellow": "Yellow",
+        "mint": "Mint"
+      },
+      "overlayThemes": {
+        "pill": {
+          "name": "Pill",
+          "description": "Classic rounded pill with icon and cancel button"
+        },
+        "minimal": {
+          "name": "Minimal",
+          "description": "Compact bars only, no icons"
+        },
+        "glassmorphism": {
+          "name": "Glass",
+          "description": "Modern frosted glass effect"
         }
       }
     }
