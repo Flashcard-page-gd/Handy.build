@@ -1004,7 +1004,15 @@ vad_backend?: VadBackend;
  * not gated on this — that follows model capability. Migrated from the old
  * `overlay_position` (position `none` → style `None`).
  */
-overlay_style?: OverlayStyle }
+overlay_style?: OverlayStyle;
+accent_theme?: string;
+overlay_theme?: string;
+overlay_show_icons?: boolean;
+overlay_bars_centered?: boolean;
+overlay_bar_count?: number;
+overlay_bar_size?: number;
+overlay_bar_color?: string;
+}
 export type AudioDevice = { index: string; name: string; is_default: boolean }
 export type AutoSubmitKey = "enter" | "ctrl_enter" | "cmd_enter"
 export type AvailableAccelerators = { transcribe: string[]; ort: string[]; gpu_devices: GpuDeviceOption[] }
