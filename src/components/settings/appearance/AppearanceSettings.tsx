@@ -14,6 +14,7 @@ import {
   applyTheme,
 } from "../../../theme";
 import { OverlayPreview } from "./OverlayPreview";
+import { ShowOverlay } from "../ShowOverlay";
 
 // Preset bar colors
 const BAR_COLOR_OPTIONS = [
@@ -130,9 +131,11 @@ export const AppearanceSettings: React.FC = () => {
       </SettingsGroup>
 
       <SettingsGroup title={t("settings.appearance.overlayTheme.title")}>
+        <ShowOverlay descriptionMode="tooltip" grouped={true} />
+
         {/* Overlay Preview */}
         <div className="px-4 py-3">
-          <div className="flex items-center justify-center p-6 bg-mid-gray/10 rounded-lg">
+          <div className="flex items-center justify-center p-8 bg-black rounded-xl border border-mid-gray/20 shadow-inner">
             <OverlayPreview
               accentTheme={selectedAccentTheme}
               overlayTheme={selectedOverlayTheme}

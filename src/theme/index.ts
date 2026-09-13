@@ -88,7 +88,13 @@ export const OVERLAY_THEME_OPTIONS = [
 ];
 
 export const applyTheme = (theme: AccentTheme): void => {
-  document.documentElement.setAttribute("data-theme", theme);
+  const root = document.documentElement;
+  root.setAttribute("data-accent-theme", theme);
+  const colors = getThemeColors(theme);
+  root.style.setProperty("--color-logo-primary", colors.primary);
+  root.style.setProperty("--color-background-ui", colors.background);
+  root.style.setProperty("--color-logo-stroke", colors.stroke);
+  root.style.setProperty("--color-accent-light", colors.light);
 };
 
 export const syncThemeFromSettings = async (): Promise<AccentTheme> => {
