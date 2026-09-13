@@ -11,6 +11,7 @@
   },
   "sidebar": {
     "general": "General",
+    "appearance": "Appearance",
     "models": "Models",
     "advanced": "Advanced",
     "postProcessing": "Post Process",
@@ -229,6 +230,65 @@
       },
       "noModelsMatch": "No models match this filter."
     },
+    "appearance": {
+      "title": "Appearance",
+      "accentColor": {
+        "title": "Accent Color",
+        "description": "Choose an accent color theme for the app",
+        "selectTheme": "Select {{theme}} theme"
+      },
+      "themes": {
+        "pink": "Pink",
+        "blue": "Ocean Blue",
+        "green": "Forest Green",
+        "purple": "Royal Purple",
+        "orange": "Sunset Orange",
+        "teal": "Teal"
+      },
+      "overlayTheme": {
+        "title": "Overlay Style"
+      },
+      "showIcons": {
+        "label": "Show Icons",
+        "description": "Display microphone and cancel icons in the overlay"
+      },
+      "barsCentered": {
+        "label": "Centered Bars",
+        "description": "Bars grow from center instead of bottom"
+      },
+      "barCount": {
+        "label": "Bar Count",
+        "description": "Number of audio level bars"
+      },
+      "barSize": {
+        "label": "Bar Size",
+        "description": "Width of audio level bars"
+      },
+      "barColor": {
+        "label": "Bar Color",
+        "description": "Color of the audio level bars",
+        "accent": "Accent",
+        "white": "White",
+        "red": "Red",
+        "cyan": "Cyan",
+        "yellow": "Yellow",
+        "mint": "Mint"
+      },
+      "overlayThemes": {
+        "pill": {
+          "name": "Pill",
+          "description": "Classic rounded pill with icon and cancel button"
+        },
+        "minimal": {
+          "name": "Minimal",
+          "description": "Compact bars only, no icons"
+        },
+        "glassmorphism": {
+          "name": "Glass",
+          "description": "Modern frosted glass effect"
+        }
+      }
+    },
     "sound": {
       "title": "Sound",
       "microphone": {
@@ -436,7 +496,7 @@
         "title": "Prompt",
         "selectedPrompt": {
           "title": "Selected Prompt",
-          "description": "Select a template for refining transcriptions or create a new one. Use ${output} inside the prompt text to reference the captured transcript."
+          "description": "Select a template for refining transcriptions or create a new one. Use ${output} to reference the captured transcript and ${custom_words} to include your custom words list."
         },
         "noPrompts": "No prompts available",
         "selectPrompt": "Select a prompt",
@@ -445,7 +505,7 @@
         "promptLabelPlaceholder": "Enter prompt name",
         "promptInstructions": "Prompt Instructions",
         "promptInstructionsPlaceholder": "Write the instructions to run after transcription. Example: Improve grammar and clarity for the following text: ${output}",
-        "promptTip": "Tip: Use <code>${output}</code> to insert the transcribed text in your prompt.",
+        "promptTip": "Tip: Use <code>${output}</code> to insert the transcribed text and <code>${custom_words}</code> to include your custom words list.",
         "updatePrompt": "Update Prompt",
         "deletePrompt": "Delete Prompt",
         "createPrompt": "Create Prompt",

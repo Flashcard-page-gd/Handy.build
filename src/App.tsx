@@ -30,6 +30,7 @@ import { useSettings } from "./hooks/useSettings";
 import { useSettingsStore } from "./stores/settingsStore";
 import { commands } from "@/bindings";
 import { getLanguageDirection, initializeRTL } from "@/lib/utils/rtl";
+import { syncThemeFromSettings } from "@/theme";
 
 type OnboardingStep = "accessibility" | "model" | "done";
 
@@ -86,6 +87,7 @@ function App() {
 
   useEffect(() => {
     checkOnboardingStatus();
+    syncThemeFromSettings();
   }, []);
 
   // Initialize RTL direction when language changes

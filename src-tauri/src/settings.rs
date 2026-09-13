@@ -248,6 +248,27 @@ impl ModelUnloadTimeout {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Type, Default)]
+#[serde(rename_all = "snake_case")]
+pub enum AccentTheme {
+    #[default]
+    Pink,
+    Blue,
+    Green,
+    Purple,
+    Orange,
+    Teal,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Type, Default)]
+#[serde(rename_all = "snake_case")]
+pub enum OverlayTheme {
+    #[default]
+    Pill,
+    Minimal,
+    Glassmorphism,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Type)]
 #[serde(rename_all = "snake_case")]
 pub enum SoundTheme {
@@ -466,6 +487,20 @@ pub struct AppSettings {
     #[serde(default = "default_theme")]
     pub theme: Theme,
     #[serde(default)]
+    pub accent_theme: AccentTheme,
+    #[serde(default)]
+    pub overlay_theme: OverlayTheme,
+    #[serde(default = "default_overlay_show_icons")]
+    pub overlay_show_icons: bool,
+    #[serde(default = "default_overlay_bars_centered")]
+    pub overlay_bars_centered: bool,
+    #[serde(default = "default_overlay_bar_count")]
+    pub overlay_bar_count: u32,
+    #[serde(default = "default_overlay_bar_size")]
+    pub overlay_bar_size: u32,
+    #[serde(default = "default_overlay_bar_color")]
+    pub overlay_bar_color: String,
+    #[serde(default)]
     pub experimental_enabled: bool,
     #[serde(default)]
     pub lazy_stream_close: bool,
@@ -566,6 +601,26 @@ fn default_overlay_position() -> OverlayPosition {
     // Position only matters when the overlay is shown; whether it shows at all is
     // `overlay_style` (Linux defaults that to None). So a single default suffices.
     OverlayPosition::Bottom
+}
+
+fn default_overlay_show_icons() -> bool {
+    true
+}
+
+fn default_overlay_bars_centered() -> bool {
+    false
+}
+
+fn default_overlay_bar_count() -> u32 {
+    9
+}
+
+fn default_overlay_bar_size() -> u32 {
+    6
+}
+
+fn default_overlay_bar_color() -> String {
+    "accent".to_string()
 }
 
 fn default_overlay_style() -> OverlayStyle {
@@ -970,6 +1025,13 @@ pub fn get_default_settings() -> AppSettings {
         vad_enabled: default_vad_enabled(),
         vad_backend: VadBackend::default(),
         overlay_style: default_overlay_style(),
+        accent_theme: AccentTheme::default(),
+        overlay_theme: OverlayTheme::default(),
+        overlay_show_icons: default_overlay_show_icons(),
+        overlay_bars_centered: default_overlay_bars_centered(),
+        overlay_bar_count: default_overlay_bar_count(),
+        overlay_bar_size: default_overlay_bar_size(),
+        overlay_bar_color: default_overlay_bar_color(),
     }
 }
 

@@ -16,7 +16,8 @@
     "postProcessing": "पोस्ट प्रोसेस",
     "history": "इतिहास",
     "debug": "डिबग",
-    "about": "के बारे में"
+    "about": "के बारे में",
+    "appearance": "Appearance"
   },
   "onboarding": {
     "subtitle": "शुरू करने के लिए, एक ट्रांसक्रिप्शन मॉडल चुनें",
@@ -633,6 +634,65 @@
           "title": "ggml",
           "description": "डिवाइस पर ही मशीन लर्निंग इन्फ़रेंस के लिए हाई-परफ़ॉर्मेंस टेंसर लाइब्रेरी",
           "details": "Handy का लोकल स्पीच-टू-टेक्स्ट transcribe.cpp और ggml पर आधारित है. Georgi Gerganov और योगदान देने वालों के शानदार काम के लिए धन्यवाद."
+        }
+      }
+    },
+    "appearance": {
+      "title": "Appearance",
+      "accentColor": {
+        "title": "Accent Color",
+        "description": "Choose an accent color theme for the app",
+        "selectTheme": "Select {{theme}} theme"
+      },
+      "themes": {
+        "pink": "Pink",
+        "blue": "Ocean Blue",
+        "green": "Forest Green",
+        "purple": "Royal Purple",
+        "orange": "Sunset Orange",
+        "teal": "Teal"
+      },
+      "overlayTheme": {
+        "title": "Overlay Style"
+      },
+      "showIcons": {
+        "label": "Show Icons",
+        "description": "Display microphone and cancel icons in the overlay"
+      },
+      "barsCentered": {
+        "label": "Centered Bars",
+        "description": "Bars grow from center instead of bottom"
+      },
+      "barCount": {
+        "label": "Bar Count",
+        "description": "Number of audio level bars"
+      },
+      "barSize": {
+        "label": "Bar Size",
+        "description": "Width of audio level bars"
+      },
+      "barColor": {
+        "label": "Bar Color",
+        "description": "Color of the audio level bars",
+        "accent": "Accent",
+        "white": "White",
+        "red": "Red",
+        "cyan": "Cyan",
+        "yellow": "Yellow",
+        "mint": "Mint"
+      },
+      "overlayThemes": {
+        "pill": {
+          "name": "Pill",
+          "description": "Classic rounded pill with icon and cancel button"
+        },
+        "minimal": {
+          "name": "Minimal",
+          "description": "Compact bars only, no icons"
+        },
+        "glassmorphism": {
+          "name": "Glass",
+          "description": "Modern frosted glass effect"
         }
       }
     }
